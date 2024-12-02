@@ -22,6 +22,17 @@ if (isset($_GET['id'])) {
             <link rel="stylesheet" href="Estilos.css">
         </head>
         <body>
+        <nav class="navbar">
+    <div class="nav-container">
+        <h1 class="logo">Biblioteca Virtual</h1>
+        <ul class="nav-links">
+            <li><a href="index.php">Inicio</a></li>
+            <li><a href="subir-libro.php">Subir Libro</a></li>
+            <li><a href="#">Acerca de</a></li>
+            <li><a href="#">Contacto</a></li>
+        </ul>
+    </div>
+</nav>
             <div class="libro-detalles">
                 <div class="libro-imagen">
                     <img src="<?= $portada; ?>" alt="Portada del libro" class="libro-portada">
