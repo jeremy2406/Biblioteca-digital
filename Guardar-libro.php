@@ -3,7 +3,10 @@ require 'conexion.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $titulo = $_POST['titulo'];
+    $categoria = $_POST['categoria'];
     $autor = $_POST['autor'];
+    $fecha = $_POST['fecha'];
+    $subido_por = $_POST['subido_por'];
     $descripcion = $_POST['descripcion'];
     $archivo = $_FILES['archivo'];
     $portada = $_FILES['portada'];
@@ -28,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Guardar en la base de datos
-        $stmt = $conexion->prepare("INSERT INTO libros (titulo, autor, descripcion, archivo_pdf, Portada) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $titulo, $autor, $descripcion, $rutaPDF, $rutaPortada);
+        $stmt = $conexion->prepare("INSERT INTO libros (titulo, categoria, autor, fecha_subida, descripcion, subido_por, archivo_pdf, portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssss", $titulo, $categoria, $autor, $fecha, $descripcion, $subido_por, $rutaPDF, $rutaPortada);
 
         if ($stmt->execute()) {
             echo "Libro guardado en la base de datos.<br>";

@@ -34,8 +34,34 @@
         </div>
 
         <div class="form-group">
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="Ficción">Ficción</option>
+                <option value="No Ficción">No Ficción</option>
+                <option value="Ciencia">Ciencia</option>
+                <option value="Historia">Historia</option>
+                <option value="Biografía">Biografía</option>
+                <option value="Autoayuda">Autoayuda</option>
+                <option value="Fantasía">Fantasía</option>
+                <option value="Misterio">Misterio</option>
+                <option value="Tecnología">Tecnología</option>
+                <option value="Romance">Romance</option>
+            </select>
+        </div>
+
+        <div class="form-group">
             <label for="autor">Autor:</label>
             <input type="text" id="autor" name="autor" placeholder="Escribe el autor del libro" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fecha">Fecha de Subida:</label>
+            <input type="date" id="fecha" name="fecha" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subido_por">Subido Por:</label>
+            <input type="text" id="subido_por" name="subido_por" placeholder="Escribe tu nombre" required>
         </div>
 
         <div class="form-group">
@@ -47,13 +73,16 @@
             <label for="archivo">Archivo PDF:</label>
             <input type="file" id="archivo" name="archivo" accept="application/pdf" required>
         </div>
-<div>
-<label for="portada">Portada:</label> 
-<input type="file" name="portada" id="portada" required>
-</div>
+        
+        <div class="form-group">
+            <label for="portada">Portada:</label> 
+            <input type="file" name="portada" id="portada" required>
+        </div>
+
         <button type="submit" class="btn btn-submit">Subir Libro</button>
     </form>
 </div>
+
 
 <script>
     const fileInput = document.getElementById('archivo');
