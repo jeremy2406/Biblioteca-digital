@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/13fccec0c7.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="login.css" />
+    <title>Registro y Ingreso de Usuario</title>
+    <link rel="shortcut icon" href="LogoDon.webp" type="image/x-icon">
+  </head>
+  <body>
+    <div class="container">
+      <div class="forms-container">
+        <div class="signin-signup">
+          <form action="Login.php" method="post" class="sign-in-form">
+            <h2 class="title">Acceder</h2>
+            <div class="input-field">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" placeholder="Matricula" name="Matricula" required />
+              </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Nombre Estudiante" name="Nombre_Estudiante" required />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Contraseña" name="Contrasena" required />
+            </div>
+            <input type="submit" value="Acceder" name="Acceder" class="btn solid"/>
+            <p class="social-text">Acceder con las Redes Sociales</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fa-brands fa-x-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+          <form action="Login.php" method="post" class="sign-up-form">
+            <h2 class="title">Registrar</h2>
+            <div class="input-field">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" placeholder="Matricula" name="Matricula" required />
+              </div>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" placeholder="Nombre de Usuario" name="Nombre_Estudiante" required />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email" placeholder="Email" name="Email" required/>
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" placeholder="Contraseña" name="Contrasena" required />
+            </div>
+            <input type="submit" class="btn" value="Registrarse" name="Registrar" />
+            <p class="social-text">Registrarse con las Redes Sociales</p>
+            <div class="social-media">
+              <a href="#" class="social-icon">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-twitter"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-google"></i>
+              </a>
+              <a href="#" class="social-icon">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>No tienes Cuenta?</h3>
+            <p>
+              Haz click aqui para crearte una cuenta y nevegar por la pagina
+            </p>
+            <button class="btn transparent" id="sign-up-btn">
+              Registrar
+            </button>
+          </div>
+          <img src="LogoDon.webp" class="image" alt="" />
+        </div>
+        <div class="panel right-panel">
+          <div class="content">
+            <h3>Tienes Cuenta?</h3>
+            <p>
+              Haz click aqui para acceder con tu cuenta ya existente
+            </p>
+            <button class="btn transparent" id="sign-in-btn">
+              Acceder
+            </button>
+          </div>
+          <img src="LogoDon.webp" class="image" alt="" />
+        </div>
+      </div>
+    </div>
+
+    <script src="login.js"></script>
+  </body>
+</html>
