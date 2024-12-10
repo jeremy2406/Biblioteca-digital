@@ -11,7 +11,9 @@ $resultCategorias = $conexion->query($queryCategorias);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="/Biblioteca-digital/CSS/Estilos.css">
+    <link rel="stylesheet" href="Estilos.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
     <script>
       function buscarLibro() {
     const query = document.getElementById('search').value.trim();
@@ -70,54 +72,179 @@ function mostrarResultados(data) {
 
     </script>
 </head>
-<body>
+<title>Biblioteca Virtual</title>
+    </head>
+    <body>
+        <!--=============== HEADER ===============-->
+        <header class="header">
+            <nav class="nav container">
+                <div class="nav__data">
+                    <a href="#" class="nav__logo">
+                         <p>Biblioteca DonBosco</p>
+                    </a>
     
-<nav class="navbar">
-    <div class="nav-container">
-        <h1 class="logo">Biblioteca Virtual</h1>
-        <ul class="nav-links">
-            <li><a href="index.php">Inicio</a></li>
-            <li><a href="subir-libro.php">Subir Libro</a></li>
-            <li><a href="#">Acerca de</a></li>
-            <li><a href="#">Contacto</a></li>
-        </ul>
-        <div class="search-container">
-            <input type="text" id="search" class="search-bar" placeholder="Buscar libro o categoría..." onkeyup="buscarLibro()">
-        </div>
-    </div>
-</nav>
-
-<div class="libros-container">
-    <?php while ($categoria = $resultCategorias->fetch_assoc()): ?>
-        <div class="categoria">
-            <h2 class="categoria-titulo"><?= htmlspecialchars($categoria['categoria']); ?></h2>
-
-            <?php
-                $categoriaNombre = $categoria['categoria'];
-                $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
-                $stmt = $conexion->prepare($queryLibros);
-                $stmt->bind_param("s", $categoriaNombre);
-                $stmt->execute();
-                $resultadoLibros = $stmt->get_result();
-                
-                if ($resultadoLibros->num_rows > 0): ?>
-                    <div class="libros">
-                        <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
-                            <div class="libro">
-                                <a href="ver-libro.php?id=<?= $row['id']; ?>">
-                                    <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
-                                </a> 
-                                <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
-                            </div>
-                        <?php endwhile; ?>
+                    <div class="nav__toggle" id="nav-toggle">
+                        <i class="ri-menu-line nav__toggle-menu"></i>
+                        <i class="ri-close-line nav__toggle-close"></i>
                     </div>
-                <?php else: ?>
-                    <p class="no-resultados">No hay libros en esta categoría.</p>
-                <?php endif; ?>
-                <?php $stmt->close(); ?>
-        </div>
-    <?php endwhile; ?>
-</div>
+                </div>
 
-</body>
+                <!--=============== NAV MENU ===============-->
+                <div class="box">
+                    <input type="text" placeholder="Search">
+                    <a href="">
+                    <i class="ri-search-eye-line"></i>
+                    </a>
+                </div>
+                <div class="nav__menu" id="nav-menu">
+                    <ul class="nav__list">
+                        <li>
+                            <a href="index.php" class="nav__link">Inicio</a>
+                        </li>
+
+                        <!--=============== DROPDOWN 1 ===============-->
+                        <li class="dropdown__item">                      
+                            <div class="nav__link dropdown__button">
+                                Materias <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                            </div>
+
+                            <div class="dropdown__container">
+                                <div class="dropdown__content">
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                           <i class="ri-book-open-fill"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Lengua Española</span>
+    
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="Subir-libro.php" class="dropdown__link">Subir Libros</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="ver-libro.php" class="dropdown__link">Ver Libros</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                          <i class="ri-quill-pen-line"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Ciencias Naturales</span>
+    
+                                        
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="Subir-libro.php" class="dropdown__link">Subir Libros</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="ver-libro.php" class="dropdown__link">Ver Libros</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                          <i class="ri-book-fill"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Ciencias Sociales</span>
+    
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="Subir-libro.php" class="dropdown__link">Subir Libros</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="ver-libro.php" class="dropdown__link">Ver Libros</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                            <i class="ri-file-paper-2-line"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Ingles</span>
+    
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="Subir-libro.php" class="dropdown__link">Subir Libros</a>
+                                            </li>
+                                        </ul>
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="ver-libro.php" class="dropdown__link">Ver Libros</a>
+                                            </li>
+                                        </ul>
+                                        
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </li>
+
+                        
+                        <li>
+                            <a href="Subir-libro.php" class="nav__link">Subir Libros</a>
+                        </li>
+
+                        <!--=============== DROPDOWN 3 ===============-->
+                        <li class="dropdown__item">                        
+                            <div class="nav__link dropdown__button">
+                                Contacto <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                            </div>
+
+                            <div class="dropdown__container">
+                                <div class="dropdown__content">
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                            <i class="ri-community-line"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Redes Sociales</span>
+    
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="https://www.instagram.com/ipidbosco/?hl=es" class="dropdown__link">Instagram</a>
+                                            </li>
+                                            <li>
+                                                <a href="https://www.facebook.com/IPIDBOSCO/?ref=page_internal" class="dropdown__link">Facebook</a>
+                                            </li>
+                                           
+                                        </ul>
+                                    </div>
+    
+                                    <div class="dropdown__group">
+                                        <div class="dropdown__icon">
+                                            <i class="ri-shield-line"></i>
+                                        </div>
+    
+                                        <span class="dropdown__title">Plataforma</span>
+    
+                                        <ul class="dropdown__list">
+                                            <li>
+                                                <a href="https://ipidbosco.ses.edu.do/lg/" class="dropdown__link">Ir</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        
+        <!--=============== MAIN JS ===============-->
+        <script src="assets/js/main.js"></script>
+    </body>
 </html>
