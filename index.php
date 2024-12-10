@@ -11,7 +11,7 @@ $resultCategorias = $conexion->query($queryCategorias);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="Estilos.css">
+    <link rel="stylesheet" href="/Biblioteca-digital/CSS/Estilos.css">
     <script>
       function buscarLibro() {
     const query = document.getElementById('search').value.trim();
