@@ -11,9 +11,8 @@ $resultCategorias = $conexion->query($queryCategorias);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="Estilos.css">
+    <link rel="stylesheet" href="../Biblioteca-digital/CSS/login.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-
     <script>
       function buscarLibro() {
     const query = document.getElementById('search').value.trim();
@@ -72,11 +71,8 @@ function mostrarResultados(data) {
 
     </script>
 </head>
-<title>Biblioteca Virtual</title>
-    </head>
-    <body>
-        <!--=============== HEADER ===============-->
-        <header class="header">
+
+    <header class="header">
             <nav class="nav container">
                 <div class="nav__data">
                     <a href="#" class="nav__logo">
@@ -243,8 +239,67 @@ function mostrarResultados(data) {
                 </div>
             </nav>
         </header>
-        
-        <!--=============== MAIN JS ===============-->
-        <script src="assets/js/main.js"></script>
-    </body>
+<body>
+<div class="libros-container">
+    <?php while ($categoria = $resultCategorias->fetch_assoc()): ?>
+        <div class="categoria">
+            <h2 class="categoria-titulo"><?= htmlspecialchars($categoria['categoria']); ?></h2>
+
+            <?php
+                $categoriaNombre = $categoria['categoria'];
+                $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
+                $stmt = $conexion->prepare($queryLibros);
+                $stmt->bind_param("s", $categoriaNombre);
+                $stmt->execute();
+                $resultadoLibros = $stmt->get_result();
+                
+                if ($resultadoLibros->num_rows > 0): ?>
+                    <div class="libros">
+                        <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
+                            <div class="libro">
+                                <a href="ver-libro.php?id=<?= $row['id']; ?>">
+                                    <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
+                                </a> 
+                                <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
+                            </div>
+                        <?php endwhile; ?>
+                    </div>
+                <?php else: ?>
+                    <p class="no-resultados">No hay libros en esta categoría.</p>
+                <?php endif; ?>
+                <?php $stmt->close(); ?>
+        </div>
+    <?php endwhile; ?>
+</div>
+
+    <footer class="pie-pagina">
+        <div class="grupo-1 reveal">
+            <div class="boxfoot">
+                <h2>UBICANOS</h2>
+                <figure>
+
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15051.508901260462!2d-70.687866!3d19.41771!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eb1cf196f54ddfb%3A0x740cafb0dbd0ef9f!2sDon%20Bosco%20Polytechnic%20Institute!5e0!3m2!1sen!2sus!4v1733892200284!5m2!1sen!2sus" width="500" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                </figure>
+            </div>
+            <div class="boxfoot">
+                <h2>SOBRE NOSOTROS</h2>
+                <p>El IPIDBOSCO es una institución educativa del nivel medio en la modalidad Técnico Profesional, del sector oficial, dirigida por la Congregación Salesiana con la finalidad de formar íntegramente los jóvenes, conjugando la formación académica, y la técnico profesional con la humana y religiosa.</p>
+            </div>
+            <div class="boxfoot">
+                <h2>CONTACTANOS</h2>
+                <div class="red-social">
+                    <a href="#" class="fa fa-facebook"></a>
+                    <a href="#" class="fa fa-instagram"></a>
+                    <a href="#" class="fa fa-twitter"></a>
+                    <a href="#" class="fa fa-youtube"></a>
+                </div>
+            </div>
+        </div>
+        <div class="grupo-2">
+            <small>&copy; 2024 <b>6TO DAAI</b> - Todos los Derechos Reservados.  <a href=""><B>Politica y Privacidad</B></a></small>
+        </div>
+    </footer>
+
+</body>
 </html>
