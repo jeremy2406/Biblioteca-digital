@@ -1,5 +1,5 @@
 <?php
-include 'Coneccion.php';
+include '/Biblioteca-digital\conexion.php';
 
 //REGISTRARSE//
 
