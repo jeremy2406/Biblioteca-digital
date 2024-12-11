@@ -19,7 +19,7 @@ $resultCategorias = $conexion->query($queryCategorias);
         function buscarLibro() {
             const query = document.getElementById('search').value.trim();
 
-            fetch(`buscar.php?q=${encodeURIComponent(query)}`)
+            fetch(`../buscar.php?q=${encodeURIComponent(query)}`)
                 .then(response => response.json())
                 .then(data => mostrarResultados(data))
                 .catch(error => console.error('Error al buscar libros:', error));
@@ -62,7 +62,7 @@ $resultCategorias = $conexion->query($queryCategorias);
                 const libroDiv = document.createElement('div');
                 libroDiv.classList.add('libro');
                 libroDiv.innerHTML = `
-            <a href="ver-libro.php?id=${libro.id}">
+            <a href="../ver-libro.php?id=${libro.id}">
                 <img src="${libro.Portada}" alt="Portada del libro" class="libro-portada">
             </a>
             <h3 class="libro-titulo">${libro.titulo}</h3>
@@ -100,7 +100,7 @@ $resultCategorias = $conexion->query($queryCategorias);
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li>
-                        <a href="index.php" class="nav__link">Inicio</a>
+                        <a href="../MenuFinaal/index.php" class="nav__link">Inicio</a>
                     </li>
 
                     <!--=============== DROPDOWN 1 ===============-->
@@ -156,9 +156,7 @@ $resultCategorias = $conexion->query($queryCategorias);
                     </li>
 
 
-                    <li>
-                        <a href="Subir-libro.php" class="nav__link">Subir Libros</a>
-                    </li>
+                    
 
                     <!--=============== DROPDOWN 3 ===============-->
                     <li class="dropdown__item">
@@ -277,7 +275,7 @@ $resultCategorias = $conexion->query($queryCategorias);
         </div>
     </footer>
     <!--=============== MAIN JS ===============-->
-    <script src="Js/main.js"></script>
+    <script src="../Js/main.js"></script>
 </body>
 
 </html>

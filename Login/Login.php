@@ -1,5 +1,5 @@
 <?php
-include '/Biblioteca-digital\conexion.php';
+include '../conexion.php';
 
 //REGISTRARSE//
 
@@ -11,7 +11,7 @@ if (isset($_POST['Registrar'])) {
     $Contrasena = md5($Contrasena);
 
     $checkEmail = "SELECT * FROM usuarios WHERE Matricula='$Matricula'";
-    $result = $conn->query($checkEmail);
+    $result = $conexion->query($checkEmail);
 
     if ($result->num_rows > 0) {
         $tipo = "error";
@@ -20,7 +20,7 @@ if (isset($_POST['Registrar'])) {
         $insertQuery = "INSERT INTO usuarios (Matricula, Nombre_Estudiante, Email, Contrasena)
                         VALUES ('$Matricula', '$Nombre_Estudiante', '$Correo_Electronico', '$Contrasena')";
 
-        if ($conn->query($insertQuery) === TRUE) {
+        if ($conexion->query($insertQuery) === TRUE) {
             $tipo = "success";
             $mensaje = "¡Registro exitoso!";
         } else {
@@ -33,11 +33,11 @@ if (isset($_POST['Registrar'])) {
 //ACCEDER//
 
 if (isset($_POST['Acceder'])) {
-    $Matricula = $conn->real_escape_string($_POST['Matricula']);
-    $Contrasena = $conn->real_escape_string(md5($_POST['Contrasena']));
+    $Matricula = $conexion->real_escape_string($_POST['Matricula']);
+    $Contrasena = $conexion->real_escape_string(md5($_POST['Contrasena']));
 
     $sql = "SELECT * FROM usuarios WHERE Matricula='$Matricula' AND Contrasena='$Contrasena'";
-    $result = $conn->query($sql);
+    $result = $conexion->query($sql);
 
     if ($result->num_rows > 0) {
         session_start();
@@ -45,9 +45,9 @@ if (isset($_POST['Acceder'])) {
         $_SESSION['Matricula'] = $row['Matricula'];
 
         if (strpos($Matricula, '987') === 0) {
-            header("Location: profesor_dashboard.php"); //SI ERES PROFESOR
+            header("Location: ../index.php"); //SI ERES PROFESOR
         } else {
-            header("Location: estudiante_dashboard.php"); //SI ERES ESTUDIANTE
+            header("Location: ../Menu.php"); //SI ERES ESTUDIANTE
         }
         exit();
     } else {

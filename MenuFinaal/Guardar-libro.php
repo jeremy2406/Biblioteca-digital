@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($archivo['error'] === UPLOAD_ERR_OK && $portada['error'] === UPLOAD_ERR_OK) {
         // Subir archivo PDF
         $nombreArchivo = basename($archivo['name']);
-        $rutaPDF = 'Assets/PDF/' . $nombreArchivo;
+        $rutaPDF = '../Assets/PDF/' . $nombreArchivo;
         if (move_uploaded_file($archivo['tmp_name'], $rutaPDF)) {
             echo "PDF subido correctamente.<br>";
         } else {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Subir imagen de portada
         $nombrePortada = basename($portada['name']);
-        $rutaPortada = 'Assets/Portadas/' . $nombrePortada;
+        $rutaPortada = '../Assets/Portadas/' . $nombrePortada;
         if (move_uploaded_file($portada['tmp_name'], $rutaPortada)) {
             echo "Portada subida correctamente.<br>";
         } else {
