@@ -232,6 +232,7 @@ function mostrarResultados(data) {
                 <div class="botones">
                     <a href="leer_libro.php?id=<?= $id; ?>" target="_blank" class="btn leer-btn">Leer Libro</a>
                     <a href="descargar_libro.php?id=<?= $id; ?>" class="btn descargar-btn">Descargar PDF</a>
+                    <a href="Eliminar-libro.php?id=<?= $id; ?>" class="btn descargar-btn" style="background-color: red;" type="submit">Eliminar</a>
                 </div>
             </div>
         </div>
