@@ -81,7 +81,7 @@ $resultCategorias = $conexion->query($queryCategorias);
     <header class="header">
         <nav class="nav container">
             <div class="nav__data">
-                <a href="index.php" class="nav__logo">
+                <a href="../Estudiante/Index-estudiante.php" class="nav__logo">
                     <p>Biblioteca DonBosco</p>
                 </a>
 

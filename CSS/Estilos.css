@@ -365,9 +365,7 @@ a {
 }
 
 /* Libros Container */
-.libros-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+.libros-container { 
     gap: 10px;
     max-width: 1200px;
     margin: 6rem auto; 
@@ -397,9 +395,9 @@ a {
 
 /* Libro */
 .libro {
+  display: inline-block;
     text-align: center;
     padding: 10px;
-    display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
