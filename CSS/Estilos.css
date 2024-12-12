@@ -410,13 +410,7 @@ a {
     transform: scale(1.05);
 }
 
-.libro-portada {
-    width: 100%;
-    max-width: 120px;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
+
 
 .libro-titulo {
     font-size: 14px;
@@ -428,66 +422,68 @@ a {
 
 /* Libro Detalles */
 .libro-detalles {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 20px;
-    margin: 20px auto;
-    max-width: 1000px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin: 6rem auto;
+  max-width: 1000px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .libro-imagen {
-    flex: 1;
-    max-width: 300px;
-    margin-right: 20px;
+  flex: 1;
+  max-width: 20rem; /* Aumenta el tamaño máximo de la imagen */
+  margin-right: 10px;
 }
 
 .libro-portada {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: auto;
+  max-width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .libro-info {
-    flex: 2;
-    max-width: 650px;
+  flex: 2;
+  max-width: 650px;
 }
 
 .libro-info h2 {
-    font-size: 2rem;
-    margin-bottom: 10px;
-    color: #333;
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .libro-info p {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    color: #555;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #555;
 }
 
 .libro-info strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .libro-info .botones {
-    display: flex;
-    gap: 20px;
+  display: flex;
+  gap: 20px;
 }
 
 .libro-info .botones .btn {
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: bold;
-    text-align: center;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    width: 200px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  width: 200px;
 }
+
 
 .leer-btn {
     background-color: #4CAF50;
@@ -593,7 +589,7 @@ textarea {
     justify-content: space-between;
     align-items: flex-start;
     max-width: 900px;
-    margin: 20px auto;
+    margin: 6rem auto;
     gap: 20px;
     padding: 20px;
 }
