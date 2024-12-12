@@ -206,7 +206,7 @@ $resultCategorias = $conexion->query($queryCategorias);
                         </div>
                     </li>
                     <li>
-                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">Cerrar Sección</a>
+                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">Cerrar Sesión</a>
                     </li>
 
                 </ul>
