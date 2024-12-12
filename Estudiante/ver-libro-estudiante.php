@@ -1,84 +1,87 @@
 <?php
 require 'conexion.php';
 
-$queryCategorias = "SELECT DISTINCT categoria FROM libros";
-$resultCategorias = $conexion->query($queryCategorias);
-?>
+if (isset($_GET['id'])) {
+    $id = intval($_GET['id']);
 
+    $stmt = $conexion->prepare("SELECT titulo, categoria, autor, fecha_subida, descripcion, subido_por, Portada, archivo_pdf FROM libros WHERE id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $stmt->store_result();
+    $stmt->bind_result($titulo, $categoria, $autor, $fecha_subida, $descripcion, $subido_por, $portada, $archivo_pdf);
+
+    if ($stmt->fetch()) {
+        ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="Css/Estilos.css">
+    <link rel="stylesheet" href="../Css/Estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/b725322e1a.js" crossorigin="anonymous"></script>
 
     <script>
-        function buscarLibro() {
-            const query = document.getElementById('search').value.trim();
+      function buscarLibro() {
+    const query = document.getElementById('search').value.trim();
 
-            fetch(`buscar.php?q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => mostrarResultados(data))
-                .catch(error => console.error('Error al buscar libros:', error));
+    fetch(`buscar.php?q=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => mostrarResultados(data))
+        .catch(error => console.error('Error al buscar libros:', error));
+}
+
+function mostrarResultados(data) {
+    const librosContainer = document.querySelector('.libros-container');
+    librosContainer.innerHTML = '';
+
+    if (data.length === 0) {
+        librosContainer.innerHTML = '<p class="no-resultados">No se encontraron resultados.</p>';
+        return;
+    }
+
+    let currentCategory = null;
+    const categoryMap = {};
+
+    data.forEach(libro => {
+        // Crear el contenedor de la categoría si no existe
+        if (libro.categoria !== currentCategory) {
+            currentCategory = libro.categoria;
+            const categoryDiv = document.createElement('div');
+            categoryDiv.classList.add('categoria');
+
+            const categoryTitle = document.createElement('h2');
+            categoryTitle.textContent = currentCategory;
+            categoryTitle.classList.add('categoria-titulo');
+
+            const librosDiv = document.createElement('div');
+            librosDiv.classList.add('libros');
+
+            categoryDiv.appendChild(categoryTitle);
+            categoryDiv.appendChild(librosDiv);
+            librosContainer.appendChild(categoryDiv);
+
+            categoryMap[currentCategory] = librosDiv;
         }
 
-        function mostrarResultados(data) {
-            const librosContainer = document.querySelector('.libros-container');
-            librosContainer.innerHTML = '';
-
-            if (data.length === 0) {
-                librosContainer.innerHTML = '<p class="no-resultados">No se encontraron resultados.</p>';
-                return;
-            }
-
-            let currentCategory = null;
-            const categoryMap = {};
-
-            data.forEach(libro => {
-                // Crear el contenedor de la categoría si no existe
-                if (libro.categoria !== currentCategory) {
-                    currentCategory = libro.categoria;
-                    const categoryDiv = document.createElement('div');
-                    categoryDiv.classList.add('categoria');
-
-                    const categoryTitle = document.createElement('h2');
-                    categoryTitle.textContent = currentCategory;
-                    categoryTitle.classList.add('categoria-titulo');
-
-                    const librosDiv = document.createElement('div');
-                    librosDiv.classList.add('libros');
-
-                    categoryDiv.appendChild(categoryTitle);
-                    categoryDiv.appendChild(librosDiv);
-                    librosContainer.appendChild(categoryDiv);
-
-                    categoryMap[currentCategory] = librosDiv;
-                }
-
-
-                const libroDiv = document.createElement('div');
-                libroDiv.classList.add('libro');
-                libroDiv.innerHTML = `
-            <a href="ver-libro.php?id=${libro.id}">
+        
+        const libroDiv = document.createElement('div');
+        libroDiv.classList.add('libro');
+        libroDiv.innerHTML = `
+            <a href="ver-libro-estudiante.php?id=${libro.id}">
                 <img src="${libro.Portada}" alt="Portada del libro" class="libro-portada">
             </a>
             <h3 class="libro-titulo">${libro.titulo}</h3>
         `;
-                categoryMap[currentCategory].appendChild(libroDiv);
-            });
-        }
+        categoryMap[currentCategory].appendChild(libroDiv);
+    });
+}
 
     </script>
 </head>
 
-<body>
-
-
-    <header class="header">
+        <!--=============== HEADER ===============-->
+        <header class="header">
         <nav class="nav container">
             <div class="nav__data">
                 <a href="index.php" class="nav__logo">
@@ -93,7 +96,7 @@ $resultCategorias = $conexion->query($queryCategorias);
 
             <!--=============== NAV MENU ===============-->
             <div class="box">
-                <input type="text" id="search" placeholder="Search" onkeyup="buscarLibro()">
+                <input type="text" placeholder="Search">
                 <a href="">
                     <i class="ri-search-eye-line"></i>
                 </a>
@@ -156,11 +159,6 @@ $resultCategorias = $conexion->query($queryCategorias);
                         </div>
                     </li>
 
-
-                    <li>
-                        <a href="Subir-libro.php" class="nav__link">Subir Libros</a>
-                    </li>
-
                     <!--=============== DROPDOWN 3 ===============-->
                     <li class="dropdown__item">
                         <div class="nav__link dropdown__button">
@@ -205,48 +203,34 @@ $resultCategorias = $conexion->query($queryCategorias);
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">Cerrar Sección</a>
-                    </li>
-
                 </ul>
             </div>
         </nav>
-    </header>
+        </header>
+        
+       
+    
 
-    <div class="libros-container">
-        <?php while ($categoria = $resultCategorias->fetch_assoc()): ?>
-            <div class="categoria">
-                <h2 class="categoria-titulo"><?= htmlspecialchars($categoria['categoria']); ?></h2>
 
-                <?php
-                $categoriaNombre = $categoria['categoria'];
-                $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
-                $stmt = $conexion->prepare($queryLibros);
-                $stmt->bind_param("s", $categoriaNombre);
-                $stmt->execute();
-                $resultadoLibros = $stmt->get_result();
-
-                if ($resultadoLibros->num_rows > 0): ?>
-                    <div class="libros">
-                        <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
-                            <div class="libro">
-                                <a href="ver-libro.php?id=<?= $row['id']; ?>">
-                                    <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
-                                </a>
-                                <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
-                            </div>
-                        <?php endwhile; ?>
-                    </div>
-                <?php else: ?>
-                    <p class="no-resultados">No hay libros en esta categoría.</p>
-                <?php endif; ?>
-                <?php $stmt->close(); ?>
+        <div class="libro-detalles">
+            <div class="libro-imagen">
+                <img src="<?= $portada; ?>" alt="Portada del libro" class="libro-portada">
             </div>
-        <?php endwhile; ?>
-    </div>
+            <div class="libro-info">
+                <h2><?= htmlspecialchars($titulo); ?></h2>
+                <p><strong>Autor:</strong> <?= htmlspecialchars($autor); ?></p>
+                <p><strong>Categoría:</strong> <?= htmlspecialchars($categoria); ?></p>
+                <p><strong>Fecha de Subida:</strong> <?= htmlspecialchars($fecha_subida); ?></p>
+                <p><strong>Subido por:</strong> <?= htmlspecialchars($subido_por); ?></p>
+                <p><strong>Descripción:</strong> <?= nl2br(htmlspecialchars($descripcion)); ?></p>
 
-    <footer class="pie-pagina">
+                <div class="botones">
+                    <a href="leer_libro.php?id=<?= $id; ?>" target="_blank" class="btn leer-btn">Leer Libro</a>
+                    <a href="descargar_libro.php?id=<?= $id; ?>" class="btn descargar-btn">Descargar PDF</a>
+                </div>
+            </div>
+        </div>
+        <footer class="pie-pagina">
         <div class="grupo-1 reveal">
             <div class="boxfoot">
                 <h2>UBICANOS</h2>
@@ -284,5 +268,17 @@ $resultCategorias = $conexion->query($queryCategorias);
     <!--=============== MAIN JS ===============-->
     <script src="Js/main.js"></script>
 </body>
+        </body>
+        </html>
+        <?php
+    } else {
+        echo "<p>Libro no encontrado.</p>";
+    }
 
-</html>
+    $stmt->close();
+} else {
+    echo "<p>ID no especificado.</p>";
+}
+
+$conexion->close();
+?>

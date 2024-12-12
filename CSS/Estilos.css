@@ -107,9 +107,9 @@ a {
 /*=============== NAV ===============*/
 .nav {
   height: var(--header-height);
-  
  
 }
+
 .nav__data {
   height: 100%;
   display: flex;

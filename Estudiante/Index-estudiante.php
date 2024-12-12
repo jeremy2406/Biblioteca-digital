@@ -12,8 +12,9 @@ $resultCategorias = $conexion->query($queryCategorias);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="Css/Estilos.css">
+    <link rel="stylesheet" href="../Css/Estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/b725322e1a.js" crossorigin="anonymous"></script>
 
     <script>
         function buscarLibro() {
@@ -202,6 +203,9 @@ $resultCategorias = $conexion->query($queryCategorias);
                             </div>
                         </div>
                     </li>
+                    <li>
+                        <a href="../Login\Login.html" class="nav__link">Cerrar Sección</a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -224,7 +228,7 @@ $resultCategorias = $conexion->query($queryCategorias);
                     <div class="libros">
                         <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
                             <div class="libro">
-                                <a href="ver-libro.php?id=<?= $row['id']; ?>">
+                                <a href="ver-libro-estudiante.php?id=<?= $row['id']; ?>">
                                     <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
                                 </a>
                                 <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>

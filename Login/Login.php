@@ -47,7 +47,7 @@ if (isset($_POST['Acceder'])) {
         if (strpos($Matricula, '987') === 0) {
             header("Location: ../index.php"); //SI ERES PROFESOR
         } else {
-            header("Location: ../Menu.php"); //SI ERES ESTUDIANTE
+            header("Location: ../Estudiante/index-estudiante.php"); //SI ERES ESTUDIANTE
         }
         exit();
     } else {
