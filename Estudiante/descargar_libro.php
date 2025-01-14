@@ -29,5 +29,6 @@ if (isset($_GET['id'])) {
     echo "ID de libro no especificado.";
 }
 
+
 $conexion->close();
 ?>

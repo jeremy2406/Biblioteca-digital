@@ -10,6 +10,9 @@ if (isset($_POST['Registrar'])) {
     $Contrasena = $_POST['Contrasena'];
     $Contrasena = md5($Contrasena);
 
+    // Ruta de la imagen por defecto
+    $imagenPorDefecto = '../Biblioteca-digital/FotoUser.png';
+
     $checkEmail = "SELECT * FROM usuarios WHERE Matricula='$Matricula'";
     $result = $conexion->query($checkEmail);
 
@@ -17,8 +20,8 @@ if (isset($_POST['Registrar'])) {
         $tipo = "error";
         $mensaje = "¡Error! La matrícula ya existe.";
     } else {
-        $insertQuery = "INSERT INTO usuarios (Matricula, Nombre_Estudiante, Email, Contrasena)
-                        VALUES ('$Matricula', '$Nombre_Estudiante', '$Correo_Electronico', '$Contrasena')";
+        $insertQuery = "INSERT INTO usuarios (Matricula, Nombre_Estudiante, Email, Contrasena, Imagen)
+                        VALUES ('$Matricula', '$Nombre_Estudiante', '$Correo_Electronico', '$Contrasena', '$imagenPorDefecto')";
 
         if ($conexion->query($insertQuery) === TRUE) {
             $tipo = "success";
@@ -43,6 +46,7 @@ if (isset($_POST['Acceder'])) {
         session_start();
         $row = $result->fetch_assoc();
         $_SESSION['Matricula'] = $row['Matricula'];
+        $_SESSION['Nombre_Estudiante'] = $row['Nombre_Estudiante'];
 
         if (strpos($Matricula, '987') === 0) {
             header("Location: ../index.php"); //SI ERES PROFESOR
@@ -55,6 +59,7 @@ if (isset($_POST['Acceder'])) {
         $mensaje = "Matrícula o contraseña incorrecta.";
     }
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -92,5 +97,3 @@ if (isset($_POST['Acceder'])) {
     <?php } ?>
 </body>
 </html>
-
-
