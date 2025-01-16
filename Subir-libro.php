@@ -26,6 +26,7 @@ $resultCategorias = $conexion->query($queryCategorias);
     <link rel="stylesheet" href="Css/Estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://kit.fontawesome.com/b725322e1a.js" crossorigin="anonymous"></script>
 
     <script>
       function buscarLibro() {

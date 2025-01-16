@@ -67,9 +67,10 @@ session_start();
                 libroDiv.innerHTML = `
             <a href="ver-libro.php?id=${libro.id}">
                 <img src="${libro.Portada}" alt="Portada del libro" class="libro-portada">
+
             </a>
             <h3 class="libro-titulo">${libro.titulo}</h3>
-        `;
+        `
                 categoryMap[currentCategory].appendChild(libroDiv);
             });
         }
@@ -269,7 +270,7 @@ session_start();
                         <div class="libro">
                             <a href="ver-libro.php?id=<?= $row['id']; ?>" class="libro-enlace">
                                 <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
-                                <!-- Círculo con la cantidad de descargas -->
+                                
                                 <div class="descargas-circulo">
                                     <?= htmlspecialchars($row['descargas']); ?>
                                 </div>
