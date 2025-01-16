@@ -35,7 +35,7 @@ if(isset($_POST['Actualizar'])){
         $Editar_Foto = $_FILES['Editar_Foto']['name'];
         $Editar_Foto_size = $_FILES['Editar_Foto']['size'];
         $Editar_Foto_tmp_name = $_FILES['Editar_Foto']['tmp_name'];
-        $Editar_Foto_Folder = '/Biblioteca-digital/Fotos_Perfil' . $Editar_Foto;
+        $Editar_Foto_Folder = '../Estudiante/' . $Editar_Foto;
 
         if ($Editar_Foto_size > 5000000) {
             $success = false;
@@ -272,9 +272,9 @@ if(isset($_POST['Actualizar'])){
         <form action="" method="post" enctype="multipart/form-data">
             <?php
                 if($fetch['Imagen'] == ''){
-                    echo '<img src="/Biblioteca-digital/Fotos_Perfil/FotoUser.png">';
+                    echo '<img src="../Estudiante/FotoUser.png">';
                 }else{
-                    echo '<img src="/Biblioteca-digital/'.$fetch['Imagen'].'">';
+                    echo '<img src="../Estudiante/'.$fetch['Imagen'].'">';
                 }
             ?>
             <div class="flex">
