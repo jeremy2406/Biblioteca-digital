@@ -67,10 +67,9 @@ session_start();
                 libroDiv.innerHTML = `
             <a href="ver-libro.php?id=${libro.id}">
                 <img src="${libro.Portada}" alt="Portada del libro" class="libro-portada">
-
             </a>
             <h3 class="libro-titulo">${libro.titulo}</h3>
-        `
+        `;
                 categoryMap[currentCategory].appendChild(libroDiv);
             });
         }
@@ -258,7 +257,7 @@ session_start();
 
             <?php
             $categoriaNombre = $categoria['categoria'];
-            $queryLibros = "SELECT id, titulo, Portada, descargas FROM libros WHERE categoria = ?";
+            $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
             $stmt = $conexion->prepare($queryLibros);
             $stmt->bind_param("s", $categoriaNombre);
             $stmt->execute();
@@ -268,15 +267,25 @@ session_start();
                 <div class="libros">
                     <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
                         <div class="libro">
-                            <a href="ver-libro.php?id=<?= $row['id']; ?>" class="libro-enlace">
+                            <a href="ver-libro.php?id=<?= $row['id']; ?>">
                                 <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
-                                
-                                <div class="descargas-circulo">
-                                    <?= htmlspecialchars($row['descargas']); ?>
-                                </div>
                             </a>
                             <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
-                        </div>
+
+                            <div class="estrella-resultado" data-id="<?= $row['id']; ?>">
+                                <input type="radio" name="rate-<?= $row['id']; ?>" id="rate-5-<?= $row['id']; ?>" value="5">
+                                <label for="rate-5-<?= $row['id']; ?>" class="fas fa-star"></label>
+                                <input type="radio" name="rate-<?= $row['id']; ?>" id="rate-4-<?= $row['id']; ?>" value="4">
+                                <label for="rate-4-<?= $row['id']; ?>" class="fas fa-star"></label>
+                                <input type="radio" name="rate-<?= $row['id']; ?>" id="rate-3-<?= $row['id']; ?>" value="3">
+                                <label for="rate-3-<?= $row['id']; ?>" class="fas fa-star"></label>
+                                <input type="radio" name="rate-<?= $row['id']; ?>" id="rate-2-<?= $row['id']; ?>" value="2">
+                                <label for="rate-2-<?= $row['id']; ?>" class="fas fa-star"></label>
+                                <input type="radio" name="rate-<?= $row['id']; ?>" id="rate-1-<?= $row['id']; ?>" value="1">
+                                <label for="rate-1-<?= $row['id']; ?>" class="fas fa-star"></label>
+                            </div>
+
+                            
                     <?php endwhile; ?>
                 </div>
             <?php else: ?>
@@ -286,8 +295,6 @@ session_start();
         </div>
     <?php endwhile; ?>
 </div>
-
-
 
     <footer class="pie-pagina">
         <div class="grupo-1 reveal">
