@@ -1,88 +1,98 @@
 <?php
-require 'conexion.php';
+include 'conexion.php';
 session_start();
+$Nombre_Estudiante = $_SESSION['Nombre_Estudiante'];
+$Matricula = $_SESSION['Matricula'];
 
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
+if(isset($_POST['Actualizar'])){
+    $old_Contrasena = $_POST['old_Contrasena'];
+    $Editar_Contrasena = !empty($_POST['Editar_Contrasena']) ? mysqli_real_escape_string($conexion, md5($_POST['Editar_Contrasena'])) : '';
+    $Nueva_Contrasena = !empty($_POST['Nueva_Contrasena']) ? mysqli_real_escape_string($conexion, md5($_POST['Nueva_Contrasena'])) : '';
+    $Confirmar_Contrasena = !empty($_POST['Confirmar_Contrasena']) ? mysqli_real_escape_string($conexion, md5($_POST['Confirmar_Contrasena'])) : '';
 
-    $stmt = $conexion->prepare("SELECT titulo, categoria, autor, fecha_subida, descripcion, subido_por, Portada, archivo_pdf FROM libros WHERE id = ?");
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
-    $stmt->store_result();
-    $stmt->bind_result($titulo, $categoria, $autor, $fecha_subida, $descripcion, $subido_por, $portada, $archivo_pdf);
+    $success = true; // Flag para verificar el éxito general
+    $errorMessages = []; // Almacenar mensajes de error
 
-    if ($stmt->fetch()) {
-        ?>
+    // Actualizar contraseña solo si los campos no están vacíos
+    if (!empty($Editar_Contrasena) || !empty($Nueva_Contrasena) || !empty($Confirmar_Contrasena)) {
+        if ($Editar_Contrasena != $old_Contrasena) {
+            $success = false;
+            $errorMessages[] = "La contraseña antigua no coincide.";
+        } elseif ($Nueva_Contrasena != $Confirmar_Contrasena) {
+            $success = false;
+            $errorMessages[] = "Las contraseñas no coinciden.";
+        } else {
+            $updateContrasena = mysqli_query($conexion, "UPDATE usuarios SET Contrasena = '$Confirmar_Contrasena' WHERE Matricula = '$Matricula'");
+            if (!$updateContrasena) {
+                $success = false;
+                $errorMessages[] = "Error al actualizar la contraseña.";
+            }
+        }
+    }
+
+    // Actualizar foto de perfil
+    if (isset($_FILES['Editar_Foto']) && $_FILES['Editar_Foto']['error'] == UPLOAD_ERR_OK) {
+        $Editar_Foto = $_FILES['Editar_Foto']['name'];
+        $Editar_Foto_size = $_FILES['Editar_Foto']['size'];
+        $Editar_Foto_tmp_name = $_FILES['Editar_Foto']['tmp_name'];
+        $Editar_Foto_Folder = '/Biblioteca-digital/Fotos_Perfil' . $Editar_Foto;
+
+        if ($Editar_Foto_size > 5000000) {
+            $success = false;
+            $errorMessages[] = "La imagen es muy grande.";
+        } else {
+            $image_update_query = mysqli_query($conexion, "UPDATE usuarios SET Imagen = '$Editar_Foto' WHERE Matricula = '$Matricula'");
+            if ($image_update_query) {
+                move_uploaded_file($Editar_Foto_tmp_name, $Editar_Foto_Folder);
+            } else {
+                $success = false;
+                $errorMessages[] = "Error al actualizar la imagen.";
+            }
+        }
+    }
+
+    // Mostrar alerta de SweetAlert
+    if ($success) {
+        echo "<script>
+            window.onload = function() {
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'El perfil ha sido actualizado correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            };
+        </script>";
+    } else {
+        $errorText = implode(' ', $errorMessages);
+        echo "<script>
+            window.onload = function() {
+                Swal.fire({
+                    title: 'Error',
+                    text: '$errorText',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            };
+        </script>";
+    }
+}
+?>
+
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biblioteca Virtual</title>
-    <link rel="stylesheet" href="../Css/Estilos.css">
+    <title>Editar Perfil</title>
+    <link rel="stylesheet" href="../CSS/Perfil.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-
-    <script>
-      function buscarLibro() {
-    const query = document.getElementById('search').value.trim();
-
-    fetch(`buscar.php?q=${encodeURIComponent(query)}`)
-        .then(response => response.json())
-        .then(data => mostrarResultados(data))
-        .catch(error => console.error('Error al buscar libros:', error));
-}
-
-function mostrarResultados(data) {
-    const librosContainer = document.querySelector('.libros-container');
-    librosContainer.innerHTML = '';
-
-    if (data.length === 0) {
-        librosContainer.innerHTML = '<p class="no-resultados">No se encontraron resultados.</p>';
-        return;
-    }
-
-    let currentCategory = null;
-    const categoryMap = {};
-
-    data.forEach(libro => {
-        // Crear el contenedor de la categoría si no existe
-        if (libro.categoria !== currentCategory) {
-            currentCategory = libro.categoria;
-            const categoryDiv = document.createElement('div');
-            categoryDiv.classList.add('categoria');
-
-            const categoryTitle = document.createElement('h2');
-            categoryTitle.textContent = currentCategory;
-            categoryTitle.classList.add('categoria-titulo');
-
-            const librosDiv = document.createElement('div');
-            librosDiv.classList.add('libros');
-
-            categoryDiv.appendChild(categoryTitle);
-            categoryDiv.appendChild(librosDiv);
-            librosContainer.appendChild(categoryDiv);
-
-            categoryMap[currentCategory] = librosDiv;
-        }
-
-        
-        const libroDiv = document.createElement('div');
-        libroDiv.classList.add('libro');
-        libroDiv.innerHTML = `
-            <a href="ver-libro-estudiante.php?id=${libro.id}">
-                <img src="${libro.Portada}" alt="Portada del libro" class="libro-portada">
-            </a>
-            <h3 class="libro-titulo">${libro.titulo}</h3>
-        `;
-        categoryMap[currentCategory].appendChild(libroDiv);
-    });
-}
-
-    </script>
+    <script src="https://kit.fontawesome.com/b725322e1a.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
-        <!--=============== HEADER ===============-->
-        <header class="header">
+<header class="header">
         <nav class="nav container">
             <div class="nav__data">
                 <a href="../Estudiante/Index-estudiante.php" class="nav__logo">
@@ -231,7 +241,7 @@ function mostrarResultados(data) {
 
                                 <div class="dropdown__group">
                                     <div class="dropdown__icon">
-                                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">
+                                        <a href="../Login/Login.html" class="nav__link">
                                             <i class="fa-solid fa-right-to-bracket"></i>
                                         </a>
                                     </div>
@@ -246,78 +256,49 @@ function mostrarResultados(data) {
             </div>
         </nav>
     </header>
-        
-       
-    
 
 
-        <div class="libro-detalles">
-            <div class="libro-imagen">
-                <img src="<?= $portada; ?>" alt="Portada del libro" class="libro-portada">
-            </div>
-            <div class="libro-info">
-                <h2><?= htmlspecialchars($titulo); ?></h2>
-                <p><strong>Autor:</strong> <?= htmlspecialchars($autor); ?></p>
-                <p><strong>Categoría:</strong> <?= htmlspecialchars($categoria); ?></p>
-                <p><strong>Fecha de Subida:</strong> <?= htmlspecialchars($fecha_subida); ?></p>
-                <p><strong>Subido por:</strong> <?= htmlspecialchars($subido_por); ?></p>
-                <p><strong>Descripción:</strong> <?= nl2br(htmlspecialchars($descripcion)); ?></p>
-
-                <div class="botones">
-                    <a href="leer_libro.php?id=<?= $id; ?>" target="_blank" class="btn leer-btn">Leer Libro</a>
-                    <a href="descargar_libro.php?id=<?= $id; ?>" class="btn descargar-btn">Descargar PDF</a>
-                </div>
-            </div>
-        </div>
-        <footer class="pie-pagina">
-        <div class="grupo-1 reveal">
-            <div class="boxfoot">
-                <h2>UBICANOS</h2>
-                <figure>
-
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15051.508901260462!2d-70.687866!3d19.41771!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eb1cf196f54ddfb%3A0x740cafb0dbd0ef9f!2sDon%20Bosco%20Polytechnic%20Institute!5e0!3m2!1sen!2sus!4v1733892200284!5m2!1sen!2sus"
-                        width="500" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-                </figure>
-            </div>
-            <div class="boxfoot">
-                <h2>SOBRE NOSOTROS</h2>
-                <p>El IPIDBOSCO es una institución educativa del nivel medio en la modalidad Técnico Profesional, del
-                    sector
-                    oficial, dirigida por la Congregación Salesiana con la finalidad de formar íntegramente los jóvenes,
-                    conjugando la formación académica, y la técnico profesional con la humana y religiosa.</p>
-            </div>
-            <div class="boxfoot">
-                <h2>CONTACTANOS</h2>
-                <div class="red-social">
-                    <a href="#" class="fa fa-facebook"></a>
-                    <a href="#" class="fa fa-instagram"></a>
-                    <a href="#" class="fa fa-twitter"></a>
-                    <a href="#" class="fa fa-youtube"></a>
-                </div>
-            </div>
-        </div>
-        <div class="grupo-2">
-            <small>&copy; 2024 <b>6TO DAAI</b> - Todos los Derechos Reservados. <a href=""><B>Politica y
-                        Privacidad</B></a></small>
-        </div>
-    </footer>
-    <!--=============== MAIN JS ===============-->
-    <script src="Js/main.js"></script>
-</body>
-        </body>
-        </html>
+<body>
+    <div class="EditarPerfil">
         <?php
-    } else {
-        echo "<p>Libro no encontrado.</p>";
-    }
+            $select = mysqli_query($conexion, "SELECT * FROM usuarios WHERE Nombre_Estudiante = '$Nombre_Estudiante'")
+            or die("Error al traer los datos");
 
-    $stmt->close();
-} else {
-    echo "<p>ID no especificado.</p>";
-}
+            if(mysqli_num_rows($select) > 0){
+                $fetch = mysqli_fetch_assoc($select);
+            }
+        ?>
 
-$conexion->close();
-?>
+        <form action="" method="post" enctype="multipart/form-data">
+            <?php
+                if($fetch['Imagen'] == ''){
+                    echo '<img src="/Biblioteca-digital/Fotos_Perfil/FotoUser.png">';
+                }else{
+                    echo '<img src="/Biblioteca-digital/'.$fetch['Imagen'].'">';
+                }
+            ?>
+            <div class="flex">
+                <div class="inputBox">
+                    <span>Nombre Estudiante: </span>
+                    <input type="text" name="Editar_Nombre" value="<?php echo $fetch['Nombre_Estudiante']; ?>" class="caja" readonly>
+                    <span>Correo Electronico: </span>
+                    <input type="text" name="Editar_Email" value="<?php echo $fetch['Email']; ?>" class="caja" readonly>
+                    <span>Foto de Perfil: </span>
+                    <input type="file" name="Editar_Foto" accept="image/jpg, image/png, image/jpeg" class="caja">
+                </div>
+                <div class="inputBox">
+                    <input type="hidden" name="old_Contrasena" value="<?php echo $fetch['Contrasena']; ?>">
+                    <span>Antigua Contraseña: </span>
+                    <input type="password" name="Editar_Contrasena" placeholder="Ingrese Antigua" class="caja">
+                    <span>Nueva Contraseña: </span>
+                    <input type="password" name="Nueva_Contrasena" placeholder="Ingrese Nueva" class="caja">
+                    <span>Confirmar Contraseña: </span>
+                    <input type="password" name="Confirmar_Contrasena" placeholder="Confirmar Contraseña" class="caja">
+                </div>
+            </div>
+            <input type="submit" value="Actualizar Perfil" name="Actualizar" class="btn">
+
+        </form>
+    </div>
+</body>
+</html>

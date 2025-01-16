@@ -206,7 +206,7 @@ if(!isset($_SESSION['Nombre_Estudiante'])){
             if($fetch['Imagen'] == ''){
                 echo '<img src="../Biblioteca-digital/FotoUser.png">';
             }else{
-                echo '<img src="../Biblioteca-digital/Fotos_Perfil'.$fetch['Imagen'].'">';
+                echo '<img src="../Biblioteca-digital/'.$fetch['Imagen'].'">';
             }
         ?>
 

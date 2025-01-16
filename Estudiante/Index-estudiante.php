@@ -3,6 +3,7 @@ require 'conexion.php';
 
 $queryCategorias = "SELECT DISTINCT categoria FROM libros";
 $resultCategorias = $conexion->query($queryCategorias);
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -78,10 +79,10 @@ $resultCategorias = $conexion->query($queryCategorias);
 <body>
 
 
-    <header class="header">
+<header class="header">
         <nav class="nav container">
             <div class="nav__data">
-                <a href="../Estudiante/Index-estudiante.php" class="nav__logo">
+                <a href="index.php" class="nav__logo">
                     <p>Biblioteca DonBosco</p>
                 </a>
 
@@ -101,7 +102,7 @@ $resultCategorias = $conexion->query($queryCategorias);
             <div class="nav__menu" id="nav-menu">
                 <ul class="nav__list">
                     <li>
-                        <a href="../MenuFinaal/index.php" class="nav__link">Inicio</a>
+                        <a href="../Estudiante/Index-estudiante.php" class="nav__link">Inicio</a>
                     </li>
 
                     <!--=============== DROPDOWN 1 ===============-->
@@ -156,9 +157,6 @@ $resultCategorias = $conexion->query($queryCategorias);
                         </div>
                     </li>
 
-
-                    
-
                     <!--=============== DROPDOWN 3 ===============-->
                     <li class="dropdown__item">
                         <div class="nav__link dropdown__button">
@@ -203,9 +201,44 @@ $resultCategorias = $conexion->query($queryCategorias);
                             </div>
                         </div>
                     </li>
-                    <li>
-                        <a href="../Login\Login.html" class="nav__link">Cerrar Sesión</a>
+
+                    <li class="dropdown__item">
+                    <div class="nav__link dropdown__button">
+                        <?php
+                        if (isset($_SESSION['Nombre_Estudiante'])) {
+                            echo htmlspecialchars($_SESSION['Nombre_Estudiante']); // Muestra el nombre del usuario
+                        } else {
+                            echo "User"; // Muestra "User" si no hay sesión
+                        }
+                        ?>
+                        <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                    </div>
+
+                        <div class="dropdown__container">
+                            <div class="dropdown__content">
+                                <div class="dropdown__group">
+                                    <div class="dropdown__icon">
+                                        <a href="../Estudiante/Perfil-Estudiante.php">
+                                            <i class="fa-solid fa-user"></i>
+                                        </a>
+                                    </div>
+
+                                    <span class="dropdown__title">Ver perfil</span>
+                                </div>
+
+                                <div class="dropdown__group">
+                                    <div class="dropdown__icon">
+                                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">
+                                            <i class="fa-solid fa-right-to-bracket"></i>
+                                        </a>
+                                    </div>
+
+                                    <span class="dropdown__title">Cerrar Sesion</span>
+                                </div>
+                            </div>
+                        </div>
                     </li>
+
                 </ul>
             </div>
         </nav>
