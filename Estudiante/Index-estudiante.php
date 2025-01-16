@@ -228,7 +228,7 @@ session_start();
 
                                 <div class="dropdown__group">
                                     <div class="dropdown__icon">
-                                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">
+                                        <a href="../Login/Login.html" class="nav__link">
                                             <i class="fa-solid fa-right-to-bracket"></i>
                                         </a>
                                     </div>
