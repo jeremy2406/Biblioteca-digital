@@ -1,6 +1,18 @@
 <?php
 require 'conexion.php';
 
+session_start();
+$Nombre_Estudiante = $_SESSION['Nombre_Estudiante'];
+
+$select = mysqli_query($conexion, "SELECT * FROM usuarios WHERE Nombre_Estudiante = '$Nombre_Estudiante'")
+            or die("Error al traer los datos");
+
+    if(mysqli_num_rows($select) > 0){
+        $fetch = mysqli_fetch_assoc($select);
+    }else{
+        echo "No se encontraron datos";
+    }
+
 $queryCategorias = "SELECT DISTINCT categoria FROM libros";
 $resultCategorias = $conexion->query($queryCategorias);
 ?>
@@ -90,7 +102,7 @@ function mostrarResultados(data) {
 
             <!--=============== NAV MENU ===============-->
             <div class="box">
-                <input type="text" placeholder="Search">
+                <input type="text" id="search" placeholder="Search" onkeyup="buscarLibro()">
                 <a href="">
                     <i class="ri-search-eye-line"></i>
                 </a>
@@ -202,10 +214,48 @@ function mostrarResultados(data) {
                             </div>
                         </div>
                     </li>
+
+                    <li class="dropdown__item">
+                    <div class="nav__link dropdown__button">
+                        <?php
+                        if (isset($_SESSION['Nombre_Estudiante'])) {
+                            echo htmlspecialchars($_SESSION['Nombre_Estudiante']); // Muestra el nombre del usuario
+                        } else {
+                            echo "User"; // Muestra "User" si no hay sesión
+                        }
+                        ?>
+                        <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+                    </div>
+
+                        <div class="dropdown__container">
+                            <div class="dropdown__content">
+                                <div class="dropdown__group">
+                                    <div class="dropdown__icon">
+                                        <a href="../Biblioteca-digital/Perfil.php">
+                                            <i class="fa-solid fa-user"></i>
+                                        </a>
+                                    </div>
+
+                                    <span class="dropdown__title">Ver perfil</span>
+                                </div>
+
+                                <div class="dropdown__group">
+                                    <div class="dropdown__icon">
+                                        <a href="../Biblioteca-digital/Login/Login.html" class="nav__link">
+                                            <i class="fa-solid fa-right-to-bracket"></i>
+                                        </a>
+                                    </div>
+
+                                    <span class="dropdown__title">Cerrar Sesion</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
                 </ul>
             </div>
         </nav>
-        </header>
+    </header>
         
     
 
@@ -259,7 +309,7 @@ function mostrarResultados(data) {
 
         <div class="form-group">
             <label for="subido_por">Subido Por:</label>
-            <input type="text" id="subido_por" name="subido_por" placeholder="Escribe tu nombre" required>
+            <input type="text" value="<?php echo $fetch['Nombre_Estudiante']; ?>" id="subido_por" name="subido_por" required readonly>
         </div>
 
         <div class="form-group">
