@@ -1,9 +1,13 @@
 <?php
 require 'conexion.php';
 
-$queryCategorias = "SELECT * from libros where categoria = 'Español'";
-$resultCategorias = $conexion->query($queryCategorias);
-session_start();
+
+$categoriaEspecifica = "Español";
+$queryLibros = "SELECT id, titulo, Portada, descargas FROM libros WHERE categoria = ?";
+$stmt = $conexion->prepare($queryLibros);
+$stmt->bind_param("s", $categoriaEspecifica);
+$stmt->execute();
+$resultadoLibros = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -245,36 +249,30 @@ session_start();
     </header>
 
     <div class="libros-container">
-        <?php while ($categoria = $resultCategorias->fetch_assoc()): ?>
-            <div class="categoria">
-                <h2 class="categoria-titulo"><?= htmlspecialchars($categoria['categoria']); ?></h2>
+    <div class="categoria">
+        <h2 class="categoria-titulo"><?= htmlspecialchars($categoriaEspecifica); ?></h2>
 
-                <?php
-                $categoriaNombre = $categoria['categoria'];
-                $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
-                $stmt = $conexion->prepare($queryLibros);
-                $stmt->bind_param("s", $categoriaNombre);
-                $stmt->execute();
-                $resultadoLibros = $stmt->get_result();
-
-                if ($resultadoLibros->num_rows > 0): ?>
-                    <div class="libros">
-                        <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
-                            <div class="libro">
-                                <a href="ver-libro.php?id=<?= $row['id']; ?>">
-                                    <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
-                                </a>
-                                <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
-                            </div>
-                        <?php endwhile; ?>
+        <?php if ($resultadoLibros->num_rows > 0): ?>
+            <div class="libros">
+                <?php while ($row = $resultadoLibros->fetch_assoc()): ?>
+                    <div class="libro">
+                        <a href="ver-libro.php?id=<?= $row['id']; ?>">
+                            <img src="<?= htmlspecialchars($row['Portada']); ?>" alt="Portada del libro" class="libro-portada">
+                            <div class="descargas-circulo">
+                                    <?= htmlspecialchars($row['descargas']); ?>
+                                </div>
+                        </a>
+                        <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
                     </div>
-                <?php else: ?>
-                    <p class="no-resultados">No hay libros en esta categoría.</p>
-                <?php endif; ?>
-                <?php $stmt->close(); ?>
+                <?php endwhile; ?>
             </div>
-        <?php endwhile; ?>
+        <?php else: ?>
+            <p class="no-resultados">No hay libros en esta categoría.</p>
+        <?php endif; ?>
+
+        <?php $stmt->close(); ?>
     </div>
+</div>
 
     <footer class="pie-pagina">
         <div class="grupo-1 reveal">

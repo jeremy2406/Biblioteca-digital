@@ -251,7 +251,7 @@ session_start();
 
                 <?php
                 $categoriaNombre = $categoria['categoria'];
-                $queryLibros = "SELECT id, titulo, Portada FROM libros WHERE categoria = ?";
+                $queryLibros = "SELECT id, titulo, Portada, descargas FROM libros WHERE categoria = ?";
                 $stmt = $conexion->prepare($queryLibros);
                 $stmt->bind_param("s", $categoriaNombre);
                 $stmt->execute();
@@ -263,6 +263,9 @@ session_start();
                             <div class="libro">
                                 <a href="ver-libro-estudiante.php?id=<?= $row['id']; ?>">
                                     <img src="<?= $row['Portada']; ?>" alt="Portada del libro" class="libro-portada">
+                                    <div class="descargas-circulo">
+                                    <?= htmlspecialchars($row['descargas']); ?>
+                                </div>
                                 </a>
                                 <h3 class="libro-titulo"><?= htmlspecialchars($row['titulo']); ?></h3>
                             </div>
